@@ -1,0 +1,2 @@
+SELECT *FROM point WHERE Z  = (SELECT MAX(Z) FROM point) ;
+SELECT *FROM point WHERE Z  = (SELECT MIN(Z) FROM point) ;
