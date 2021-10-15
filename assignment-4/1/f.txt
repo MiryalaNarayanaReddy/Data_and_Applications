@@ -1,0 +1,15 @@
+
+CREATE TABLE ROTATED (
+    X FLOAT,
+    Y FLOAT,
+    Z FLOAT
+);
+
+INSERT INTO ROTATED 
+SELECT  p.x*r1.a+p.y*r1.b+p.z*r1.c, 
+        p.x*r2.a+p.y*r2.b+p.z*r2.c, 
+        p.x*r3.a+p.y*r3.b+p.z*r3.c 
+FROM POINT p, 
+(SELECT * FROM ROTATE LIMIT 0,1) r1,
+(SELECT * FROM ROTATE LIMIT 1,1) r2, 
+(SELECT * FROM ROTATE LIMIT 2,2)  r3;

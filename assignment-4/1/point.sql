@@ -1,37 +1,64 @@
-CREATE TABLE point (
+CREATE TABLE POINT (
     X int,
     Y int,
     Z int
 );
 
-INSERT INTO point VALUES (1,2,3);
-INSERT INTO point VALUES (12,34,55);
-INSERT INTO point VALUES (51,23,31);
-INSERT INTO point VALUES (12,23,34);
-INSERT INTO point VALUES (12,34,34);
-INSERT INTO point VALUES (9,21,83);
-INSERT INTO point VALUES (20,1,3);
-INSERT INTO point VALUES (20,10,5);
+INSERT INTO POINT VALUES (1,2,3);
+INSERT INTO POINT VALUES (12,34,55);
+INSERT INTO POINT VALUES (51,23,31);
+INSERT INTO POINT VALUES (12,23,34);
+INSERT INTO POINT VALUES (12,34,34);
+INSERT INTO POINT VALUES (9,21,83);
+INSERT INTO POINT VALUES (20,1,3);
+INSERT INTO POINT VALUES (20,10,5);
 
-SELECT *FROM point;
+SELECT *FROM POINT;
 
 
 -- 1 --
 
-SELECT *FROM point ORDER BY x, y, z;
+SELECT *FROM POINT ORDER BY x, y, z;
 
 -- 2 --
 
-SELECT *FROM point WHERE Z  = (SELECT MAX(Z) FROM point) ;
-SELECT *FROM point WHERE Z  = (SELECT MIN(Z) FROM point) ;
+SELECT *FROM POINT WHERE Z  = (SELECT MAX(Z) FROM POINT) ;
+SELECT *FROM POINT WHERE Z  = (SELECT MIN(Z) FROM POINT) ;
 
 -- 3 --
 
-SELECT x,y,z FROM point ORDER BY SQRT(x*x+y*y+z*z) LIMIT 5;
+SELECT x,y,z FROM POINT ORDER BY SQRT(x*x+y*y+z*z) LIMIT 5;
 
 --4--
 
-select SUM(x)/COUNT(x) ,SUM(y)/COUNT(x) ,SUM(z)/COUNT(x) from point; 
+select SUM(x)/COUNT(x) ,SUM(y)/COUNT(x) ,SUM(z)/COUNT(x) from POINT; 
 
 --5--
+
+CREATE TABLE ROTATE (
+   A FLOAT,
+   B FLOAT,
+   C FLOAT
+);
+
+set @t = 1;
+INSERT INTO ROTATE VALUES (cos(@t),-sin(@t),0) , (sin(@t),cos(@t),0) , (0,0,1);
+
+
+-- 6 --
+
+CREATE TABLE ROTATED (
+    X FLOAT,
+    Y FLOAT,
+    Z FLOAT
+);
+
+INSERT INTO ROTATED 
+SELECT  p.x*r1.a+p.y*r1.b+p.z*r1.c, 
+        p.x*r2.a+p.y*r2.b+p.z*r2.c, 
+        p.x*r3.a+p.y*r3.b+p.z*r3.c 
+FROM POINT p, 
+(SELECT * FROM ROTATE LIMIT 0,1) r1,
+(SELECT * FROM ROTATE LIMIT 1,1) r2, 
+(SELECT * FROM ROTATE LIMIT 2,2)  r3;
 
