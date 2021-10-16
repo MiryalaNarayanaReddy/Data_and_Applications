@@ -17,4 +17,4 @@ SELECT H.DOC_ID, (H.hello_freq + W.world_freq )/H.TOTAL_WORDS as score
     FROM 
         HS1 as H,HS2 as W 
     WHERE 
-        H.DOC_ID = W.DOC_ID and  NOT (H.hello_freq + W.world_freq = 0);
+        H.DOC_ID = W.DOC_ID and  NOT ( H.hello_freq = 0 ) and NOT ( W.world_freq = 0 );
