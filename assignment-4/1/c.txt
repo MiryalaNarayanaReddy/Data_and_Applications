@@ -1,1 +1,1 @@
-SELECT x,y,z FROM point ORDER BY SQRT(x*x+y*y+z*z) LIMIT k;
+SELECT x,y,z FROM POINT ORDER BY SQRT(x*x+y*y+z*z) LIMIT k;

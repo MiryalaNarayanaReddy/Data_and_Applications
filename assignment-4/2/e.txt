@@ -1,1 +1,1 @@
-SELECT "Cant' believe the assignments are all done!" as  "";
+SELECT "Can't believe the assignments are all done!" as  "";

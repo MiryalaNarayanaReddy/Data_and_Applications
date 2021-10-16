@@ -1,4 +1,11 @@
 
--- Order by Avg Score--
-
-SELECT DISTINCT I.WORD from INVINDEX as I ORDER BY (SELECT SUM(I1.FREQ/(SELECT SUM(FREQ) FROM INVINDEX WHERE DOC_ID = I1.DOC_ID))/COUNT(*) from INVINDEX as I1 WHERE I1.WORD= I.WORD) DESC;
+SELECT DISTINCT I.WORD 
+    from 
+        INVINDEX as I 
+    ORDER BY(
+                SELECT 
+                    SUM(I1.FREQ/(SELECT SUM(FREQ) FROM INVINDEX WHERE DOC_ID = I1.DOC_ID))/COUNT(*) 
+                from 
+                    INVINDEX as I1 
+                WHERE I1.WORD = I.WORD
+            ) DESC;

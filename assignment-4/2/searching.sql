@@ -6,7 +6,7 @@ create table INVINDEX (
 
 
 insert into INVINDEX 
-values  ('hello',4,20),
+values  ('Hello',4,20),
         ('Marvel',2,4),
         ('World',12,9),
         ('Blackpink',41,5),
@@ -27,7 +27,7 @@ values ('Pizza','Italy',5),
 ('Taylor','Singer',8),
 ('Modi','Dancer',13),
 ('Pasta','Pineapple',5);
-
+-- ('Grammy','Ice',8);
 
 -- 2 --
 --------------------
