@@ -1,1 +1,1 @@
-select SUM(x)/COUNT(x) ,SUM(y)/COUNT(x) ,SUM(z)/COUNT(x) from point; 
+SELECT SUM(x)/COUNT(x) ,SUM(y)/COUNT(x) ,SUM(z)/COUNT(x) from point; 
