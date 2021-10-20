@@ -213,8 +213,8 @@ CREATE TABLE MMC (
     Apartment_number INT NOT NULL,
     paid_upto DATE NOT NULL,
     PRIMARY KEY (Block_name , Apartment_number),
-    CONSTRAINT MMC_fk_1 FOREIGN KEY (Block_name,Apartment_number)
-        REFERENCES APARTMENT (Block_name,Apartment_number)
+    CONSTRAINT MMC_fk_1 FOREIGN KEY (Block_name , Apartment_number)
+        REFERENCES APARTMENT (Block_name , Apartment_number)
 );
 
 
@@ -226,7 +226,63 @@ INSERT INTO MMC VALUES
 
 UNLOCK TABLES;
 
+-- committee tenure
 
+DROP TABLE IF EXISTS COMMITTEE_TENURE;
+
+CREATE TABLE COMMITTEE_TENURE (
+    Committee_id BIGINT NOT NULL,
+    Perid_start DATE NOT NULL,
+    Period_end DATE,
+    PRIMARY KEY (Committee_id)
+);
+
+LOCK TABLES COMMITTEE_TENURE WRITE;
+
+INSERT INTO COMMITTEE_TENURE VALUES 
+(1,'2020-10-01',NULL);
+
+UNLOCK TABLES;
+
+-- committee
+
+DROP TABLE IF EXISTS COMMITEE;
+
+CREATE TABLE COMMITTEE (
+    Committee_id BIGINT NOT NULL,
+    Member_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Member_id BIGINT NOT NULL,
+    PRIMARY KEY (Committee_id , Member_id),
+    KEY (Email_id)
+);
+
+LOCK TABLES COMMITTEE WRITE;
+
+INSERT INTO COMMITTEE VALUES 
+(1,'Vigneshwar','vigneshwar1@yahoo.com',2020101), -- member id = committee_id member_number
+(1,'Aryan','Aryan12@gmail.com',2020102); 
+
+UNLOCK TABLES;
+
+-- committee phno
+
+DROP TABLE IF EXISTS COMMITTEE_PHNO;
+
+CREATE TABLE COMMITTEE_PHNO (
+    Committee_id BIGINT NOT NULL,
+    Member_id BIGINT NOT NULL,
+    Member_phno BIGINT NOT NULL,
+    PRIMARY KEY (Committee_id , Member_id , Member_phno)
+);
+
+LOCK TABLES COMMITTEE_PHNO WRITE;
+
+INSERT INTO COMMITTEE_PHNO VALUES 
+(1,2020101,1234512345),
+(1,2020102,0987098712);
+
+UNLOCK TABLES;
 
 
 
