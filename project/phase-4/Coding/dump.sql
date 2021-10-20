@@ -159,12 +159,11 @@ DROP TABLE IF EXISTS TENANT;
 CREATE TABLE TENANT (
     Tenant_name VARCHAR(30) NOT NULL,
     Block_name VARCHAR(30) NOT NULL,
-	Owner_id BIGINT NOT NULL,
-    Apartment_number int NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Apartment_number INT NOT NULL,
     Email_id VARCHAR(50) NOT NULL,
     Tenant_since DATETIME NOT NULL,
-
-    PRIMARY KEY (Block_name, Owner_id),
+    PRIMARY KEY (Block_name , Owner_id),
     KEY (Email_id),
     CONSTRAINT TENANT_fk_1 FOREIGN KEY (Owner_id)
         REFERENCES OWNERS (Owner_id),
@@ -203,6 +202,33 @@ INSERT INTO TENANT_PHNO VALUES
 ('B',202010401,1234123498);
 
 UNLOCK TABLES;
+
+
+-- MMC
+
+DROP TABLE IF EXISTS MMC;
+
+CREATE TABLE MMC (
+    Block_name VARCHAR(30) NOT NULL,
+    Apartment_number INT NOT NULL,
+    paid_upto DATE NOT NULL,
+    PRIMARY KEY (Block_name , Apartment_number),
+    CONSTRAINT MMC_fk_1 FOREIGN KEY (Block_name,Apartment_number)
+        REFERENCES APARTMENT (Block_name,Apartment_number)
+);
+
+
+LOCK TABLES MMC WRITE;
+
+INSERT INTO MMC VALUES 
+('A',102,'2020-10-1'),
+('B',104,'2020-12-1');
+
+UNLOCK TABLES;
+
+
+
+
 
 
 
