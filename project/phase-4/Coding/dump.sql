@@ -13,8 +13,8 @@ USE APARTMENT_MANAGEMENT_SYSTEM;
 DROP TABLE IF EXISTS APARTMENT_COMPLEX;
 
 CREATE TABLE APARTMENT_COMPLEX (
-    Block_name VARCHAR(10) NOT NULL,
-    Block_manager_id INT NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Block_manager_id BIGINT NOT NULL,
     Block_manager_name VARCHAR(30) NOT NULL,
     Email_id VARCHAR(50) NOT NULL,
     PRIMARY KEY (Block_name),
@@ -32,27 +32,72 @@ INSERT INTO APARTMENT_COMPLEX VALUES
 
 UNLOCK TABLES;
 
+-- Block_color
+
+DROP TABLE IF EXISTS BLOCK_COLOR;
+
+CREATE TABLE BLOCK_COLOR (
+    Block_name VARCHAR(30) NOT NULL,
+    Block_color VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Block_name),
+    CONSTRAINT BLOCK_COLOR_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES BLOCK_COLOR WRITE;
+
+INSERT INTO BLOCK_COLOR VALUES 
+('A','pinkish white'),
+('B','bluish white');
+
+UNLOCK TABLES;
+
+
+
+-- Block_manager_phno
+
+DROP TABLE IF EXISTS BLOCK_MANAGER_PHNO;
+
+CREATE TABLE BLOCK_MANAGER_PHNO (
+    Block_manager_id BIGINT NOT NULL,
+    Block_manager_phno BIGINT NOT NULL,
+    PRIMARY KEY (Block_manager_id , Block_manager_phno),
+    CONSTRAINT BLOCK_MANAGER_PHNO_fk_1 FOREIGN KEY (Block_manager_id)
+        REFERENCES APARTMENT_COMPLEX (Block_manager_id)
+);
+
+LOCK TABLES BLOCK_MANAGER_PHNO WRITE;
+
+INSERT INTO BLOCK_MANAGER_PHNO VALUES 
+(2020010001,1122334455),
+(2020010001,1234567890),
+(2020010004,1212343456);
+
+UNLOCK TABLES;
+
+
+
 -- Apartment
 
 DROP TABLE IF EXISTS APARTMENT;
 
-CREATE TABLE APARTMENT(
-	Apartment_number int NOT NULL,
-    Block_name varchar(10) NOT NULL,
-    Owner_id int,
-    Apartment_size float NOT NULL,
-    Monthly_maintenance_charges float NOT NULL,
-    PRIMARY KEY (Block_name, Apartment_number),
+CREATE TABLE APARTMENT (
+    Apartment_number INT NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT,
+    Apartment_size FLOAT NOT NULL,
+    Monthly_maintenance_charges FLOAT NOT NULL,
+    PRIMARY KEY (Block_name , Apartment_number),
     KEY (Owner_id),
-    CONSTRAINT APARTMENT_fk_1 FOREIGN KEY (Block_name) REFERENCES APARTMENT_COMPLEX (Block_name)
-
+    CONSTRAINT APARTMENT_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
 );
 
 LOCK TABLES APARTMENT WRITE;
 
 INSERT INTO APARTMENT VALUES
 ('102','A',202010201,1200,1000),
-('104','A',202010401,1500,1300);
+('104','B',202010401,1500,1300);
 
 UNLOCK TABLES;
 
@@ -60,26 +105,105 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS OWNERS;
 
-CREATE TABLE OWNERS(
-	Owner_name varchar(30) NOT NULL,
-    Owner_id int NOT NULL,
-    Block_name varchar(10) NOT NULL,
-    Email_id varchar(50) NOT NULL,
-    Owner_since datetime NOT NULL,
-    PRIMARY KEY (Owner_id,Block_name),
+CREATE TABLE OWNERS (
+    Owner_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Owner_since DATETIME NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name),
     KEY (Email_id),
-    CONSTRAINT OWNERS_fk_1 FOREIGN KEY (Owner_id) REFERENCES APARTMENT(Owner_id),
-	CONSTRAINT OWNERS_fk_2 FOREIGN KEY (Block_name) REFERENCES APARTMENT_COMPLEX (Block_name)
+    CONSTRAINT OWNERS_fk_1 FOREIGN KEY (Owner_id)
+        REFERENCES APARTMENT (Owner_id),
+    CONSTRAINT OWNERS_fk_2 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
 );
-
-
 
 LOCK TABLES OWNERS WRITE;
 
 INSERT INTO OWNERS VALUES
 ('Arun',202010201,'A','arun@gmail.com','2020-10-19 20:27:35' ),
-('Krish',202010401,'A','krish@gmail.com','2020-10-10 10:00:05');
+('Krish',202010401,'B','krish@gmail.com','2020-10-10 10:00:05');
 
 UNLOCK TABLES;
+
+-- Owner_phno
+
+DROP TABLE IF EXISTS OWNER_PHNO;
+
+CREATE TABLE OWNER_PHNO (
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Owner_phno BIGINT NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name , Owner_phno),
+    CONSTRAINT OWNER_PHNO_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name),
+    CONSTRAINT OWNER_PHNO_fk_2 FOREIGN KEY (Owner_id)
+        REFERENCES OWNERS (Owner_id)
+);
+
+LOCK TABLES OWNER_PHNO WRITE;
+
+INSERT INTO OWNER_PHNO VALUES 
+('A',202010201,1122334455),
+('A',202010201,1234567890),
+('B',202010401,1212343456);
+
+UNLOCK TABLES;
+
+
+-- Tenant
+
+DROP TABLE IF EXISTS TENANT;
+
+CREATE TABLE TENANT (
+    Tenant_name VARCHAR(30) NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+	Owner_id BIGINT NOT NULL,
+    Apartment_number int NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Tenant_since DATETIME NOT NULL,
+
+    PRIMARY KEY (Block_name, Owner_id),
+    KEY (Email_id),
+    CONSTRAINT TENANT_fk_1 FOREIGN KEY (Owner_id)
+        REFERENCES OWNERS (Owner_id),
+    CONSTRAINT TENANT_fk_2 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES TENANT WRITE;
+
+INSERT INTO TENANT VALUES
+('Ravi','A',202010201,102,'ravi@outlook.com','2020-10-20 7:22:05' ),
+('Banu','B',202010401,104,'Banu@yahoo.com','2020-10-20 7:23:39');
+
+UNLOCK TABLES;
+
+-- Tenant_phno
+
+DROP TABLE IF EXISTS TENANT_PHNO;
+
+CREATE TABLE TENANT_PHNO (
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Tenant_phno BIGINT NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name , Tenant_phno),
+    CONSTRAINT TENANT_PHNO_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name),
+    CONSTRAINT TENANT_PHNO_fk_2 FOREIGN KEY (Owner_id)
+        REFERENCES OWNERS (Owner_id)
+);
+
+LOCK TABLES TENANT_PHNO WRITE;
+
+INSERT INTO TENANT_PHNO VALUES 
+('A',202010201,1111222233),
+('B',202010401,2223336660),
+('B',202010401,1234123498);
+
+UNLOCK TABLES;
+
+
 
 
