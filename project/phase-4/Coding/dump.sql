@@ -284,8 +284,100 @@ INSERT INTO COMMITTEE_PHNO VALUES
 
 UNLOCK TABLES;
 
+-- accounts
+
+DROP TABLE IF EXISTS ACCOUNTS;
+
+CREATE TABLE ACCOUNTS (
+    Committee_id BIGINT NOT NULL,
+    Period DATE NOT NULL,
+    Income FLOAT NOT NULL,
+    Total_expenditure FLOAT NOT NULL,
+    PRIMARY KEY (Committee_id,Period)
+);
+
+LOCK TABLES ACCOUNTS WRITE;
+
+INSERT INTO ACCOUNTS VALUES 
+(1,'2020-10-1',1800,1500),
+(1,'2020-11-1',2800,2000);
+
+UNLOCK TABLES;
+
+-- visitor
+
+DROP TABLE IF EXISTS VISITOR;
+
+CREATE TABLE VISITOR (
+    Visitor_number BIGINT NOT NULL AUTO_INCREMENT,
+    Visitor_name VARCHAR(30),
+    Visit_time DATETIME NOT NULL,
+    Vistor_phno BIGINT NOT NULL,
+    Purpose VARCHAR(255),
+    PRIMARY KEY (Visitor_number)
+);
+
+LOCK TABLES VISITOR WRITE;
+
+INSERT INTO VISITOR (Visitor_name, Visit_time, Vistor_phno, Purpose) VALUES 
+('vijay','2020-10-20 9:00:32',1111262233,'I am a relative of person in block A apartment number 102'),
+('Akash','2020-10-20 9:15:12',1111222233,'Wanted to know if you have any employment for me.');
+
+UNLOCK TABLES;
+
+-- complaint 
+
+DROP TABLE IF EXISTS COMPLAINT;
+
+CREATE TABLE COMPLAINT (
+    Block_name VARCHAR(30) NOT NULL,
+    Apartment_number INT NOT NULL,
+    Complaint_number BIGINT NOT NULL,
+    Complainant VARCHAR(30) NOT NULL,
+    Complaint VARCHAR(30) NOT NULL,
+    Lodge_time DATETIME NOT NULL,
+    Complaint_status VARCHAR(20) NOT NULL,
+    Complaint_type VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Complaint_number)
+);
 
 
+LOCK TABLES COMPLAINT WRITE;
 
+INSERT INTO COMPLAINT VALUES 
+('A',102,1,'Arun','No electricity in hall','2020-10-20 9:39:46','pending','electrician'),
+('B',104,2,'Arun','Tap leakage in kitchen','2020-10-20 9:43:07','pending','plumbing');
+
+UNLOCK TABLES;
+
+
+-- complaint history
+
+DROP TABLE IF EXISTS COMPLAINT_HISTORY;
+
+CREATE TABLE COMPLAINT_HISTORY (
+    Block_name VARCHAR(30) NOT NULL,
+    Apartment_number INT NOT NULL,
+    Complaint_number BIGINT NOT NULL,
+    Complainant VARCHAR(30) NOT NULL,
+    Complaint VARCHAR(30) NOT NULL,
+    Lodge_time DATETIME NOT NULL,
+    Complaint_type VARCHAR(20) NOT NULL,
+    Resolver_name VARCHAR(30) NOT NULL,
+    Resolver_phno BIGINT NOT NULL,
+    Resolver_email_id VARCHAR(50),
+    PRIMARY KEY (Complaint_number)
+);
+
+DELETE FROM COMPLAINT 
+WHERE
+    Complaint_number = 2;
+
+LOCK TABLES COMPLAINT_HISTORY  WRITE;
+
+INSERT INTO COMPLAINT_HISTORY VALUES 
+('B',104,2,'Arun','Tap leakage in kitchen','2020-10-20 9:43:07','plumbing','Ganesh',9977883322,'ganesh_pumbing@gmail.com');
+
+UNLOCK TABLES;
 
 
