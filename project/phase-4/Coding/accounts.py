@@ -36,7 +36,7 @@ def show_accounts_analysis(cur,con):
     plt.show()
 
 def show_expediture_analysis(cur,con):
-    query=f"SELECT *FROM EXPEDITURE WHERE "
+    query=f"SELECT *FROM EXPEDITURE "
     cur.execute(query)
     con.commit()
     print(query)

@@ -1,6 +1,7 @@
 from datetime import date, datetime, time
 import pymysql 
 import pymysql.cursors
+import pandas as pd
 
 def insert_new_owner(cur,con):
     new_owner = {}
@@ -55,9 +56,7 @@ def remove_owner(cur,con):
             query = f"DELETE FROM OWNERS WHERE Owner_id = %d"%(owner_id['Owner_id'])
             cur.execute(query)
             con.commit()
-            
-            
-            
+        
         except Exception as e:
             print(e)
     except Exception as e:
@@ -71,10 +70,13 @@ def list_owners_and_their_emails(cur,con):
     try:
         cur.execute(query)
         con.commit()
-        print("Name","\t","Email_id")
+        # print("Name","\t\t\t","Email_id")
         result =  cur.fetchall()
-        for item in result:
-            print(item['Owner_name'],"\t",item['Email_id'])
+        # for item in result:
+        #     print(item['Owner_name'],"\t\t",item['Email_id'])
+
+        print(pd.DataFrame(result))
+
 
     except Exception as e:
         print(e)
