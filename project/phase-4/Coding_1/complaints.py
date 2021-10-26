@@ -65,36 +65,9 @@ def lodge_complaint(cur,con):
 
 def update_complaint_status(cur,con):
     try:
-        complaint_number = input("Complaint_number: ")
+        complaint_number = input("Comalaint_number: ")
         complaint_status = input("New complaint status: ")
         query=f"UPDATE COMPLAINT SET Complaint_status = '%s' WHERE Complaint_number = %s"%(complaint_status,complaint_number)
-        cur.execute(query)
-        con.commit()
-    except Exception as e:
-        print(e)
-
-
-def remove_comaplaint(cur,con):
-    try:
-        complaint_number = input("Complaint_number: ")
-
-        query=f"SELECT * FROM COMPLAINT where Complaint_number = %s"%(complaint_number)
-        cur.execute(query)
-        con.commit()
-        result = cur.fetchone()
-        print(result)
-        result['Resolver_name'] = input("Resolver name : ")
-        result['Resolver_phno'] = input("Resolver_phone_number : ")
-        result['Resolver_email_id'] = input("Resolver_email_id : ")
-
-        query = f"INSERT INTO COMPLAINT_HISTORY VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')"%(result['Block_name'],\
-        result['Apartment_number'],result['Complaint_number'],result['Complainant'],result['Complaint'],result['Lodge_time'],\
-        result['Complaint_type'],result['Resolver_name'],result['Resolver_phno'],result['Resolver_email_id'])
-
-        cur.execute(query)
-        con.commit()
-        
-        query = f"DELETE FROM COMPLAINT WHERE Complaint_number = %s"%(complaint_number)
         cur.execute(query)
         con.commit()
     except Exception as e:

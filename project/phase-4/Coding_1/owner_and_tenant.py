@@ -2,42 +2,29 @@ from datetime import date, datetime, time
 import pymysql 
 import pymysql.cursors
 import pandas as pd
-import date_time as dt
 
 def insert_new_owner(cur,con):
+    new_owner = {}
+    new_owner['Owner_name'] = input('Owner name: ')
+    new_owner['Block_name'] = input('Block_name')
+    new_owner['Apartment_number'] = input('Apartment_number')
+    new_owner['Email_id'] = input('Email_id')
+    new_owner['Owner_since'] = input('Owner_since')
+    # new_owner['Owner_since'] = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
+
+    # creation of owner_id
+    query = f"SELECT Owner_id FROM APARTMENT WHERE Apartment_number = {new_owner['Apartment_number']} and Block_name = '{new_owner['Block_name']}';"
+   
+   # print(query)
     try:
-        Owner_name = input('Owner name: ')
-        Block_name= input('Block_name: ')
-        Apartment_number= input('Apartment_number: ')
-        Email_id= input('Email_id: ')
-        Owner_since= input('Owner_since: ')
-        Owner_id = input('Owner_id: ')
-        mmc = input('mmc: ')
-        ap_size = input('Apartment_size: ')
-        # new_owner['Owner_since'] = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
-
-        # creation of owner_id
-        query = f"ISERT INTO APARTMENT VALUES('%s','%s','%s','%s')"%(Apartment_number,Block_name,Owner_id,ap_size,mmc)
-
         cur.execute(query)
         con.commit()
-        query = f"INSERT INTO OWNERS VALUES ('%s', '%s','%s','%s','%s')"%(Owner_name,Owner_id,Block_name,Email_id,Owner_since)
-        cur.execute(query)
-        con.commit()
-
+        result = cur.fetchone()
+        new_owner['owner_id'] = int(new_owner['Owner_since'][0:4] + new_owner['Apartment_number'])*100+(result['Owner_id']%100+1)
     except Exception as e:
         print(e)
-#    # print(query)
-#     try:
-#         cur.execute(query)
-#         con.commit()
-#         result = cur.fetchone()
-#         new_owner['owner_id'] = int(new_owner['Owner_since'][0:4] + new_owner['Apartment_number'])*100+(result['Owner_id']%100+1)
-#     except Exception as e:
-#         print(e)
-#         new_owner['owner_id'] = int(new_owner['Owner_since'][0:4] + new_owner['Apartment_number'])*100 +1
-#     print(new_owner['owner_id'])
-
+        new_owner['owner_id'] = int(new_owner['Owner_since'][0:4] + new_owner['Apartment_number'])*100 +1
+    print(new_owner['owner_id'])
 
 
 def remove_owner(cur,con):
@@ -63,10 +50,10 @@ def remove_owner(cur,con):
             # print(query)
             cur.execute(query)
             con.commit()
-            query = f"DELETE FROM APARTMENT,OWNER WHERE Owner_id = '%s' and Block_name = '%s'"%(owner_id['Owner_id'],Block_name)
+            query = f"DELETE FROM APARTMENT,OWNER WHERE Owner_id = %d"%(owner_id['Owner_id'])
             cur.execute(query)
             con.commit()
-            query = f"DELETE FROM OWNERS WHERE Owner_id = '%s' and Block_name = '%s'"%(owner_id['Owner_id'],Block_name)
+            query = f"DELETE FROM OWNERS WHERE Owner_id = %d"%(owner_id['Owner_id'])
             cur.execute(query)
             con.commit()
         
@@ -79,7 +66,7 @@ def remove_owner(cur,con):
     
 def list_owners_and_their_emails(cur,con):
     Block_name = input("Block name: ")
-    query = f"SELECT (SELECT APARTMENT.Apartment_number FROM APARTMENT WHERE  APARTMENT.Owner_id = OWNERS.Owner_id and APARTMENT.Block_name = OWNERS.Block_name ) as Apartment_number,Owner_name, Email_id FROM OWNERS where Block_name = '%s' "%(Block_name)
+    query = f"SELECT Owner_name, Email_id FROM OWNERS where Block_name = '%s' "%(Block_name)
     try:
         cur.execute(query)
         con.commit()
@@ -87,9 +74,9 @@ def list_owners_and_their_emails(cur,con):
         result =  cur.fetchall()
         # for item in result:
         #     print(item['Owner_name'],"\t\t",item['Email_id'])
-        t = pd.DataFrame(result) # make table
-        t = t.to_string(index=False) # remove indexing
-        print(t)
+
+        print(pd.DataFrame(result))
+
 
     except Exception as e:
         print(e)
@@ -101,12 +88,9 @@ def apartments_with_tenants(cur,con):
         cur.execute(query)
         con.commit()
         result = cur.fetchall()
-        # print("Block_name","\t","Apartment_number")
-        # for r in result:
-        #     print(r['Block_name'],r['Apartment_number'])
-        t = pd.DataFrame(result) # make table
-        t = t.to_string(index=False) # remove indexing
-        print(t)
+        print("Block_name","\t","Apartment_number")
+        for r in result:
+            print(r['Block_name'],r['Apartment_number'])
     except Exception as e:
         print(e)
     return
@@ -118,12 +102,9 @@ def apartments_without_tenants(cur,con):
         con.commit()
         result = cur.fetchall()
 
-        # print("Block_name","\t","Apartment_number")
-        # for r in result:
-        #     print(r['Block_name'],"\t\t",r['Apartment_number'])
-        t = pd.DataFrame(result) # make table
-        t = t.to_string(index=False) # remove indexing
-        print(t)
+        print("Block_name","\t","Apartment_number")
+        for r in result:
+            print(r['Block_name'],"\t\t",r['Apartment_number'])
     except Exception as e:
         print(e)
 

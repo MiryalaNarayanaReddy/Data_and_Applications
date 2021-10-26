@@ -4,7 +4,6 @@ import pymysql.cursors
 import complaints 
 import owner_and_tenant as oats
 import accounts
-import visitors
 
 def dispatch(ch,cur,con):
     """
@@ -27,18 +26,10 @@ def dispatch(ch,cur,con):
         complaints.show_complaints(cur,con)
     elif ch == 8:
         complaints.update_complaint_status(cur,con)
-    elif ch ==9:
-        complaints.remove_comaplaint(cur,con)
-    elif ch == 10:
+    elif ch == 9:
         accounts.add_this_months_expenditure(cur,con)
-    elif ch == 11:
+    elif ch == 10:
         accounts.show_accounts_analysis(cur,con)
-    elif ch == 12:
-        visitors.add_vistor(cur,con)
-    elif ch == 13: 
-        accounts.list_apartments_with_pending_mmc(cur,con)
-    elif ch ==14:
-        accounts.update_mmc_paid_upto_date(cur,con)
     else:
         print("invalid input")
 
@@ -83,23 +74,15 @@ if __name__ == "__main__":
                 print('6 Lodge compalaint')
                 print('7 show compaliants')
                 print('8 update complaint status')
-                print('9 remove a complaint')
-                print('10 add this months expenditure')
-                print('11 show accounts analysis')
-                print('12 Add a visitor')
-                print('13 list all apartments with pending MMC')
-                print('14 update_mmc_paid_upto_date')
-                ch = input("\nEnter choice> ")
+                print('9 add this months expenditure')
+                print('10 show accounts analysis')
+                ch = int(input("\nEnter choice> "))
                 # tmp = sp.call('clear', shell=True)
                 print("---------------------------------\n")
-                if ch == '0':
+                if ch == 0:
                     exit()
-                elif ch == '' :
-                    continue
-                elif ch == 'clear':
-                    tmp = sp.call('clear', shell=True)
                 else:
-                    dispatch(int(ch),cur,con)
+                    dispatch(ch,cur,con)
 
     except Exception as e:
         tmp = sp.call('clear', shell=True)
