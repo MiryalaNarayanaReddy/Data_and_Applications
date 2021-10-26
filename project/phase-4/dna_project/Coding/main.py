@@ -88,7 +88,7 @@ if __name__ == "__main__":
                 print('11 show accounts analysis')
                 print('12 Add a visitor')
                 print('13 list all apartments with pending MMC')
-                print('14 update_mmc_paid_upto_date')
+                print('14 update mmc paid upto date')
                 ch = input("\nEnter choice> ")
                 # tmp = sp.call('clear', shell=True)
                 print("---------------------------------\n")
