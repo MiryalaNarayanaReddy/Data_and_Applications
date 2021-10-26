@@ -3,6 +3,7 @@ import subprocess as sp
 import pymysql.cursors
 import complaints 
 import owner_and_tenant as oats
+import accounts
 
 def dispatch(ch,cur,con):
     """
@@ -23,6 +24,10 @@ def dispatch(ch,cur,con):
         complaints.lodge_complaint(cur,con)
     elif ch == 7:
         complaints.show_complaints(cur,con)
+    elif ch == 8:
+        accounts.add_this_months_expenditure(cur,con)
+    elif ch == 9:
+        accounts.show_accounts_analysis(cur,con)
     else:
         print("invalid input")
 
@@ -66,6 +71,8 @@ if __name__ == "__main__":
                 print('5 list all apartments without tenants')
                 print('6 Lodge compalaint')
                 print('7 show compaliants')
+                print('8 add this months expenditure')
+                print('9 show accounts analysis')
                 ch = int(input("\nEnter choice> "))
                 # tmp = sp.call('clear', shell=True)
                 print("---------------------------------\n")
