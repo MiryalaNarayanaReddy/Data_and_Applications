@@ -1,0 +1,781 @@
+-- DATABASE FOR APARTMENT MANAGEMENT SYSTEM 
+-- AUTHOR MIRYALA NARAYANA REDDY @ 2021 OCTOBER 
+-- SQL COMMANDS TO CREATE DATABASE TABLES AND SAMPLE DATA VALUES INSERTED INTO IT.
+
+-- database creation
+DROP DATABASE IF EXISTS APARTMENT_MANAGEMENT_SYSTEM;
+CREATE SCHEMA APARTMENT_MANAGEMENT_SYSTEM;
+
+USE APARTMENT_MANAGEMENT_SYSTEM;
+
+-- Apartment complex 
+
+DROP TABLE IF EXISTS APARTMENT_COMPLEX;
+
+CREATE TABLE APARTMENT_COMPLEX (
+    Block_name VARCHAR(30) NOT NULL,
+    Block_manager_id BIGINT NOT NULL,
+    Block_manager_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    PRIMARY KEY (Block_name),
+    UNIQUE KEY (Block_manager_id),
+    UNIQUE KEY (Email_id)
+);
+
+LOCK TABLES APARTMENT_COMPLEX WRITE;
+
+INSERT INTO APARTMENT_COMPLEX VALUES 
+('A',2020010001,'Narayana','narayana@gmail.com'),
+('B',2020010002,'Animesh','animesh@gmail.com'),
+('C',2020010003,'Govind sign','govind@gmail.com'),
+('D',2020010004,'charles dickens','charles@gmail.com');
+
+UNLOCK TABLES;
+
+-- Block_color
+
+DROP TABLE IF EXISTS BLOCK_COLOR;
+
+CREATE TABLE BLOCK_COLOR (
+    Block_name VARCHAR(30) NOT NULL,
+    Block_color VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Block_name),
+    CONSTRAINT BLOCK_COLOR_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES BLOCK_COLOR WRITE;
+
+INSERT INTO BLOCK_COLOR VALUES 
+('A','pinkish white'),
+('B','bluish white');
+
+UNLOCK TABLES;
+
+
+
+-- Block_manager_phno
+
+DROP TABLE IF EXISTS BLOCK_MANAGER_PHNO;
+
+CREATE TABLE BLOCK_MANAGER_PHNO (
+    Block_manager_id BIGINT NOT NULL,
+    Block_manager_phno BIGINT NOT NULL,
+    PRIMARY KEY (Block_manager_id , Block_manager_phno),
+    CONSTRAINT BLOCK_MANAGER_PHNO_fk_1 FOREIGN KEY (Block_manager_id)
+        REFERENCES APARTMENT_COMPLEX (Block_manager_id)
+);
+
+LOCK TABLES BLOCK_MANAGER_PHNO WRITE;
+
+INSERT INTO BLOCK_MANAGER_PHNO VALUES 
+(2020010001,1122334455),
+(2020010001,1234567890),
+(2020010004,1212343456);
+
+UNLOCK TABLES;
+
+
+
+-- Apartment
+
+DROP TABLE IF EXISTS APARTMENT;
+
+CREATE TABLE APARTMENT (
+    Apartment_number INT NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT,
+    Apartment_size FLOAT NOT NULL,
+    Monthly_maintenance_charges FLOAT NOT NULL,
+    PRIMARY KEY (Block_name , Apartment_number),
+    KEY (Owner_id),
+    CONSTRAINT APARTMENT_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES APARTMENT WRITE;
+
+INSERT INTO APARTMENT VALUES
+('101','A',202010101,1200,1500),
+('102','A',202010202,1200,1500),
+('103','A',202010301,1200,1500),
+('104','A',202010401,1500,2000),
+('105','A',202010501,1500,2000),
+('201','A',202020101,1200,1500),
+('202','A',202020201,1200,1500),
+('203','A',202020301,1200,1500),
+('204','A',202020401,1500,2000),
+('205','A',202020501,1500,2000), -- 17000 MMC
+
+('101','B',202010101,1200,1500),
+('102','B',202010201,1200,1500),
+('103','B',202010301,1200,1500),
+('104','B',202010402,1500,2000),
+('105','B',202010501,1500,2000),
+('201','B',202020101,1200,1500),
+('202','B',202020201,1200,1500),
+('203','B',202020301,1200,1500),
+('204','B',202020401,1500,2000),
+('205','B',202020501,1500,2000), -- 17000 MMC
+
+('101','C',202010101,1200,1500),
+('102','C',202010201,1200,1500),
+('103','C',202010301,1200,1500),
+('104','C',202010401,1500,2000),
+('105','C',202010501,1500,2000),
+('201','C',202020101,1200,1500),
+('202','C',202020201,1200,1500),
+('203','C',202020301,1200,1500),
+('204','C',202020401,1500,2000),
+('205','C',202020501,1500,2000); -- 1700 MMC
+
+
+UNLOCK TABLES;
+
+-- Owners
+
+DROP TABLE IF EXISTS OWNERS;
+
+CREATE TABLE OWNERS (
+    Owner_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Owner_since DATETIME NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name),
+    KEY (Email_id),
+    CONSTRAINT OWNERS_fk_1 FOREIGN KEY (Owner_id)
+        REFERENCES APARTMENT (Owner_id),
+    CONSTRAINT OWNERS_fk_2 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES OWNERS WRITE;
+
+INSERT INTO OWNERS VALUES
+
+-- A
+('john',202010101,'A','johnny@gmail.com','2020-10-8 18:5:39'),
+('Arun',202010202,'A','arun@gmail.com','2020-10-09 20:27:35' ),
+('Sruthi',202010301,'A','sruthi@gmail.com','2020-09-21 12:03:32'),
+('sai tej',202010401,'A','saitej@gmail.com','2020-10-12 10:03:3'),
+('Mahesh Reddy',202010501,'A','mahesh123@gmail.com','2020-10-11 12:33:32'),
+
+('walter',202020101,'A','walter@gmail.com','2020-09-19 15:43:57'),
+('Harish chandra',202020201,'A','harishchandra@gmail.com','2020-10-5 9:25:2'),
+('Rama Reddy',202020301,'A','Rama_reddy@gmail.com','2020-09-30 13:13:29'),
+('Tanish lad',202020401,'A','Tanishlad@gmail.com','2020-10-5 15:5:52'),
+('Krishna Reddy',202020501,'A','krishnareddy@gmail.com','2020-10-2 10:17:19'),
+
+-- B
+('Ravi kiran',202010101,'B','ravika@gmail.com','2020-10-2 18:5:39'),
+('Rajan',202010201,'B','rajan@gmail.com','2020-10-02 20:27:35' ),
+('Laxman Roa',202010301,'B','laxmanrao@gmail.com','2020-09-21 12:03:32'),
+('Krish',202010402,'B','krish@gmail.com','2020-10-10 10:00:05'),
+('Uday',202010501,'B','uday@gmail.com','2020-10-4 11:00:05'),
+
+('Gopal verma',202020101,'B','gopalverma@gmail.com','2020-10-3 18:55:39'),
+('Rajan',202020201,'B','rajan@gmail.com','2020-10-03 20:47:35' ),
+('B.Ganesh',202020301,'B','ganesh.b@gmail.com','2020-10-10 15:40:45'),
+('Tarun',202020401,'B','Tarun@gmail.com','2020-10-4 10:36:39'),
+('Chandu',202020501,'B','Chandu@gmail.com','2020-10-4 10:47:35' ),
+
+--  C
+('Sravani',202010101,'C','sravani@gmail.com','2020-10-8 18:5:39'),
+('Eshwar',202010201,'C','Eswar@gmail.com','2020-10-6 20:27:35' ),
+('Kamal',202010301,'C','kamal@gmail.com','2020-09-21 13:03:32'),
+('Narayana Reddy',202010401,'C','narayanareddy@gmail.com','2020-10-5 10:20:05'),
+('channa Reddy',202010501,'C','channareddy@gmail.com','2020-10-4 11:40:05'),
+
+('Balaramkrishna',202020101,'C','balaramkrishna@gmail.com','2020-10-5 18:45:39'),
+('Akil',202020201,'C','akil@gmail.com','2020-10-05 19:47:35' ),
+('Alpan raj',202020301,'C','alpanraj@gmail.com','2020-10-11 10:40:45'),
+('Gopal',202020401,'C','gopal3@gmail.com','2020-10-9 10:07:05'),
+('Arjun',202020501,'C','arjun@gmail.com','2020-10-5 11:47:35' );
+
+UNLOCK TABLES;
+
+-- Owner_phno
+
+DROP TABLE IF EXISTS OWNER_PHNO;
+
+CREATE TABLE OWNER_PHNO (
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Owner_phno BIGINT NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name , Owner_phno),
+    CONSTRAINT OWNER_PHNO_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name),
+    CONSTRAINT OWNER_PHNO_fk_2 FOREIGN KEY (Owner_id)
+        REFERENCES OWNERS (Owner_id)
+);
+
+LOCK TABLES OWNER_PHNO WRITE;
+
+INSERT INTO OWNER_PHNO VALUES 
+('A',202010202,1122334455),
+('A',202010202,1234567890),
+('B',202010402,1212343456);
+
+UNLOCK TABLES;
+
+
+-- Tenant
+
+DROP TABLE IF EXISTS TENANT;
+
+CREATE TABLE TENANT (
+    Tenant_name VARCHAR(30) NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Apartment_number INT NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Tenant_since DATETIME NOT NULL,
+    PRIMARY KEY (Block_name , Owner_id),
+    KEY (Email_id),
+    CONSTRAINT TENANT_fk_1 FOREIGN KEY (Owner_id)
+        REFERENCES OWNERS (Owner_id),
+    CONSTRAINT TENANT_fk_2 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES TENANT WRITE;
+
+INSERT INTO TENANT VALUES
+('Ravi','A',202010202,102,'ravi@outlook.com','2020-10-20 7:22:05' ),
+('Banu','B',202010402,104,'Banu@yahoo.com','2020-10-20 7:23:39');
+
+UNLOCK TABLES;
+
+-- Tenant_phno
+
+DROP TABLE IF EXISTS TENANT_PHNO;
+
+CREATE TABLE TENANT_PHNO (
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Tenant_phno BIGINT NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name , Tenant_phno),
+    CONSTRAINT TENANT_PHNO_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name),
+    CONSTRAINT TENANT_PHNO_fk_2 FOREIGN KEY (Owner_id)
+        REFERENCES OWNERS (Owner_id)
+);
+
+LOCK TABLES TENANT_PHNO WRITE;
+
+INSERT INTO TENANT_PHNO VALUES 
+('A',202010202,1111222233),
+('B',202010402,2223336660),
+('B',202010402,1234123498);
+
+UNLOCK TABLES;
+
+
+-- MMC
+
+DROP TABLE IF EXISTS MMC;
+
+CREATE TABLE MMC (
+    Block_name VARCHAR(30) NOT NULL,
+    Apartment_number INT NOT NULL,
+    paid_upto DATE NOT NULL,
+    PRIMARY KEY (Block_name , Apartment_number),
+    CONSTRAINT MMC_fk_1 FOREIGN KEY (Block_name , Apartment_number)
+        REFERENCES APARTMENT (Block_name , Apartment_number)
+);
+
+
+LOCK TABLES MMC WRITE;
+
+INSERT INTO MMC VALUES 
+('A',102,'2020-10-1'),
+('B',104,'2020-12-1');
+
+UNLOCK TABLES;
+
+-- committee tenure
+
+DROP TABLE IF EXISTS COMMITTEE_TENURE;
+
+CREATE TABLE COMMITTEE_TENURE (
+    Committee_id BIGINT NOT NULL,
+    Perid_start DATE NOT NULL,
+    Period_end DATE,
+    PRIMARY KEY (Committee_id)
+);
+
+LOCK TABLES COMMITTEE_TENURE WRITE;
+
+INSERT INTO COMMITTEE_TENURE VALUES 
+(1,'2020-10-01',NULL);
+
+UNLOCK TABLES;
+
+-- committee
+
+DROP TABLE IF EXISTS COMMITEE;
+
+CREATE TABLE COMMITTEE (
+    Committee_id BIGINT NOT NULL,
+    Member_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Member_id BIGINT NOT NULL,
+    PRIMARY KEY (Committee_id , Member_id),
+    KEY (Email_id)
+);
+
+LOCK TABLES COMMITTEE WRITE;
+
+INSERT INTO COMMITTEE VALUES 
+(1,'Vigneshwar','vigneshwar1@yahoo.com',2020101), -- member id = committee_id member_number
+(1,'Aryan','Aryan12@gmail.com',2020102); 
+
+UNLOCK TABLES;
+
+-- committee phno
+
+DROP TABLE IF EXISTS COMMITTEE_PHNO;
+
+CREATE TABLE COMMITTEE_PHNO (
+    Committee_id BIGINT NOT NULL,
+    Member_id BIGINT NOT NULL,
+    Member_phno BIGINT NOT NULL,
+    PRIMARY KEY (Committee_id , Member_id , Member_phno)
+);
+
+LOCK TABLES COMMITTEE_PHNO WRITE;
+
+INSERT INTO COMMITTEE_PHNO VALUES 
+(1,2020101,1234512345),
+(1,2020102,0987098712);
+
+UNLOCK TABLES;
+
+-- accounts
+
+DROP TABLE IF EXISTS ACCOUNTS;
+
+CREATE TABLE ACCOUNTS (
+    Committee_id BIGINT NOT NULL,
+    Period DATE NOT NULL,
+    Income FLOAT NOT NULL,
+    Total_expenditure FLOAT NOT NULL,
+    PRIMARY KEY (Committee_id,Period)
+);
+
+LOCK TABLES ACCOUNTS WRITE;
+
+INSERT INTO ACCOUNTS VALUES 
+(1,'2020-10-31',51000,51000),
+(1,'2020-11-30',51000,30000),
+(1,'2020-12-31',51000,52000),
+(1,'2021-01-31',51000,46000),
+(1,'2021-02-28',51000,30000),
+(1,'2021-03-31',51000,30000),
+(1,'2021-04-30',51000,30000),
+(1,'2021-05-31',51000,30000),
+(1,'2021-06-30',51000,30000),
+(1,'2021-07-31',51000,30000),
+(1,'2021-08-31',51000,42000),
+(1,'2021-09-30',51000,38000);
+
+
+UNLOCK TABLES;
+
+-- visitor
+
+DROP TABLE IF EXISTS VISITOR;
+
+CREATE TABLE VISITOR (
+    Visitor_number BIGINT NOT NULL AUTO_INCREMENT,
+    Visitor_name VARCHAR(30),
+    Visit_time DATETIME NOT NULL,
+    Vistor_phno BIGINT NOT NULL,
+    Purpose VARCHAR(255),
+    PRIMARY KEY (Visitor_number)
+);
+
+LOCK TABLES VISITOR WRITE;
+
+INSERT INTO VISITOR (Visitor_name, Visit_time, Vistor_phno, Purpose) VALUES 
+('vijay','2020-10-20 9:00:32',1111262233,'I am a relative of person in block A apartment number 102'),
+('Akash','2020-10-20 9:15:12',1111222233,'Wanted to know if you have any employment for me.');
+
+UNLOCK TABLES;
+
+-- complaint 
+
+DROP TABLE IF EXISTS COMPLAINT;
+
+CREATE TABLE COMPLAINT (
+    Block_name VARCHAR(30) NOT NULL,
+    Apartment_number INT NOT NULL,
+    Complaint_number BIGINT NOT NULL,
+    Complainant VARCHAR(30) NOT NULL,
+    Complaint VARCHAR(100) NOT NULL,
+    Lodge_time DATETIME NOT NULL,
+    Complaint_status VARCHAR(20) NOT NULL,
+    Complaint_type VARCHAR(20) NOT NULL,
+    PRIMARY KEY (Complaint_number)
+);
+
+
+LOCK TABLES COMPLAINT WRITE;
+
+INSERT INTO COMPLAINT VALUES 
+('A',102,1,'Arun','No electricity in hall','2020-10-20 9:39:46','pending','electrician'),
+('B',104,2,'Arun','Tap leakage in kitchen','2020-10-20 9:43:07','pending','plumbing');
+
+UNLOCK TABLES;
+
+-- complaint history
+
+DROP TABLE IF EXISTS COMPLAINT_HISTORY;
+
+CREATE TABLE COMPLAINT_HISTORY (
+    Block_name VARCHAR(30) NOT NULL,
+    Apartment_number INT NOT NULL,
+    Complaint_number BIGINT NOT NULL,
+    Complainant VARCHAR(30) NOT NULL,
+    Complaint VARCHAR(100) NOT NULL,
+    Lodge_time DATETIME NOT NULL,
+    Complaint_type VARCHAR(20) NOT NULL,
+    Resolver_name VARCHAR(30) NOT NULL,
+    Resolver_phno BIGINT NOT NULL,
+    Resolver_email_id VARCHAR(50),
+    PRIMARY KEY (Complaint_number)
+);
+
+DELETE FROM COMPLAINT 
+WHERE
+    Complaint_number = 2;
+
+LOCK TABLES COMPLAINT_HISTORY  WRITE;
+
+INSERT INTO COMPLAINT_HISTORY VALUES 
+('B',104,2,'Arun','Tap leakage in kitchen','2020-10-20 9:43:07','plumbing','Ganesh',9977883322,'ganesh_pumbing@gmail.com');
+
+UNLOCK TABLES;
+
+
+-- employee 
+
+DROP TABLE IF EXISTS EMPLOYEE;
+
+CREATE TABLE EMPLOYEE (
+    Employee_id BIGINT NOT NULL,
+    Employee_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Salary FLOAT NOT NULL,
+    Manager_id BIGINT,
+    Work_type VARCHAR(20) NOT NULL,
+    Start_date DATE,
+    PRIMARY KEY (Employee_id)
+);
+
+LOCK TABLES EMPLOYEE WRITE;
+
+INSERT INTO EMPLOYEE VALUES 
+
+(1,'Charan','charan@yahoo.com',5000,NULL,'watch man','2020-10-1 12:14:50'),
+(2,'vanu','venu@gmail.com',5000,NULL,'watch man','2020-10-3 14:45:07'),
+(3,'ganapati','ganapati@gmail.com',10000,NULL,'cleaning','2020-10-9 10:13:16'),
+(4,'Bolu','bolu@gmail.com',10000,NULL,'cleaning','2020-10-8 10:10:6');
+
+UNLOCK TABLES;
+
+
+-- employee phno
+
+DROP TABLE IF EXISTS EMPLOYEE_PHNO;
+
+CREATE TABLE EMPLOYEE_PHNO (
+    Employee_id BIGINT NOT NULL,
+    Phone_number BIGINT NOT NULL,
+    PRIMARY KEY (Employee_id , Phone_number)
+);
+
+LOCK TABLES EMPLOYEE_PHNO WRITE;
+
+INSERT INTO EMPLOYEE_PHNO VALUES 
+(1,9998885551),
+(1,9998883330),
+(2,2323245456),
+(3,1231234563),
+(4,5588779320);
+
+UNLOCK TABLES;
+
+
+-- employee history
+
+DROP TABLE IF EXISTS EMPLOYEE_HISTORY;
+
+CREATE TABLE EMPLOYEE_HISTORY (
+    Employee_id BIGINT NOT NULL,
+    Employee_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Salary FLOAT NOT NULL,
+    Manager_id BIGINT,
+    Work_type VARCHAR(50) NOT NULL,
+    Start_date DATE,
+    end_date Date,
+    PRIMARY KEY (Employee_id)
+);
+
+LOCK TABLES EMPLOYEE_HISTORY WRITE;
+
+INSERT INTO EMPLOYEE_HISTORY VALUES 
+(2,'john','john@outlook.com',2000,NULL,'managing festive events','2020-10-01 10:21:53','2020-10-20 10:24:35');
+
+UNLOCK TABLES;
+
+
+-- employee phno
+
+DROP TABLE IF EXISTS EMPLOYEE_PHNO_HISTORY;
+
+CREATE TABLE EMPLOYEE_PHNO_HISTORY (
+    Employee_id BIGINT NOT NULL,
+    Phone_number BIGINT NOT NULL,
+    PRIMARY KEY (Employee_id , Phone_number)
+);
+
+LOCK TABLES EMPLOYEE_PHNO_HISTORY WRITE;
+
+INSERT INTO EMPLOYEE_PHNO_HISTORY VALUES 
+(2,9998885541),
+(2,9998883230);
+
+UNLOCK TABLES;
+
+-- Owner_phno history
+
+DROP TABLE IF EXISTS OWNER_PHNO_HISTORY;
+
+CREATE TABLE OWNER_PHNO_HISTORY (
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Owner_phno BIGINT NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name , Owner_phno),
+    CONSTRAINT OWNER_PHNO_HISTORY_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES OWNER_PHNO_HISTORY WRITE;
+
+INSERT INTO OWNER_PHNO_HISTORY VALUES 
+('A',202010201,1122334455),
+('A',202010201,1234567890),
+('B',202010401,1212343456);
+
+UNLOCK TABLES;
+
+-- Ownership history
+
+DROP TABLE IF EXISTS OWNERSHIP_HISTORY;
+
+CREATE TABLE OWNERSHIP_HISTORY (
+    Owner_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Owner_since DATETIME NOT NULL,
+    Owner_upto DATETIME NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name),
+    KEY (Email_id),
+    CONSTRAINT OWNERSHIP_HISTORY_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES OWNERSHIP_HISTORY WRITE;
+
+INSERT INTO OWNERSHIP_HISTORY VALUES
+('Arjun',202010201,'A','arjun@gmail.com','2020-09-17 11:04:22','2020-10-19 20:27:35' ),
+('Krishnan',202010401,'B','krishnan@gmail.com','2020-09-14 11:04:22','2020-10-10 10:00:05');
+
+UNLOCK TABLES;
+
+
+-- Tenant_phno
+
+DROP TABLE IF EXISTS TENANT_PHNO_HISTORY;
+
+CREATE TABLE TENANT_PHNO_HISTORY (
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Tenant_phno BIGINT NOT NULL,
+    PRIMARY KEY (Owner_id , Block_name , Tenant_phno),
+    CONSTRAINT TENANT_PHNO_HISTORY_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES TENANT_PHNO_HISTORY WRITE;
+
+INSERT INTO TENANT_PHNO_HISTORY VALUES 
+('A',202010201,1111277233),
+('B',202010401,2283336660),
+('B',202010401,1210123498);
+
+UNLOCK TABLES;
+
+
+
+-- Tenant
+
+DROP TABLE IF EXISTS TENANT_HISTORY;
+
+CREATE TABLE TENANT_HISTORY (
+    Tenant_name VARCHAR(30) NOT NULL,
+    Block_name VARCHAR(30) NOT NULL,
+    Owner_id BIGINT NOT NULL,
+    Apartment_number INT NOT NULL,
+    Email_id VARCHAR(50) NOT NULL,
+    Tenant_since DATETIME NOT NULL,
+    Tenant_upto DATETIME NOT NULL,
+    PRIMARY KEY (Block_name , Owner_id),
+    KEY (Email_id),
+    CONSTRAINT TENANT_HISTORY_fk_1 FOREIGN KEY (Block_name)
+        REFERENCES APARTMENT_COMPLEX (Block_name)
+);
+
+LOCK TABLES TENANT_HISTORY WRITE;
+
+INSERT INTO TENANT_HISTORY VALUES
+('Ramu','A',202010201,102,'ramu@outlook.com','2020-9-20 7:25:45', '2020-10-20 7:22:05' ),
+('Balu','B',202010401,104,'balu@gmail.com','2020-9-26 17:2:05','2020-10-1 14:53:39');
+
+UNLOCK TABLES;
+
+-- Expediture
+
+DROP TABLE IF EXISTS EXPENDITURE;
+
+CREATE TABLE EXPENDITURE (
+    Transaction_id BIGINT NOT NULL, -- yyyymmddn
+    Amount_spent FLOAT NOT NULL,
+    Transaction_time DATE NOT NULL,
+    PRIMARY KEY (Transaction_id)
+);
+
+
+LOCK TABLES EXPENDITURE WRITE;
+
+INSERT INTO EXPENDITURE VALUES
+(202010080,10000,'2020-10-8 18:28:27'),
+(202010190,5000,'2020-10-19 12:4:5'),
+(202010200,30000,'2020-10-20 17:00:38'),
+(202010280,6000,'2020-10-28 16:34:43'),
+
+(202011200,30000,'2020-11-20 17:00:40'),
+
+(202012240,30000,'2020-12-24 17:00:20'),
+(202012241,10000,'2020-12-24 10:00:20'),
+(202012300,12000,'2020-12-30 10:30:20'),
+
+
+(202101100,5000,'2021-01-10 12:34:20'),
+(202101200,30000,'2021-01-20 17:00:50'),
+(202101250,11000,'2021-01-25 13:50:20'),
+
+(202102200,30000,'2021-02-20 17:00:30'),
+(202103210,30000,'2021-03-21 17:00:49'),
+(202104200,30000,'2021-04-20 17:01:04'),
+(202105200,30000,'2021-05-20 17:01:04'),
+(202106220,30000,'2021-06-22 17:01:04'),
+(202107220,30000,'2021-07-22 17:01:04'),
+
+(202108200,30000,'2021-08-20 17:01:04'),
+(202108140,12000,'2021-08-14 14:34:03'),
+
+(202109250,30000,'2021-09-25 17:01:04'),
+(202110090,8000,'2021-10-09 16:01:04');
+
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS RENOVATIONS_AND_REPAIR;
+
+CREATE TABLE RENOVATIONS_AND_REPAIR (
+    Transaction_id BIGINT NOT NULL,
+    Type_of_renovation VARCHAR(255),
+    PRIMARY KEY (Transaction_id),
+    CONSTRAINT RENOVATIONS_AND_REPAIR_fk_1 FOREIGN KEY (Transaction_id)
+        REFERENCES EXPENDITURE (Transaction_id)
+);
+
+LOCK TABLES RENOVATIONS_AND_REPAIR WRITE;
+
+INSERT INTO RENOVATIONS_AND_REPAIR VALUES
+(202010190,'Lift repair in Block A');
+
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS PURCHASE_OF_NEW_EQUIPMENT;
+
+CREATE TABLE PURCHASE_OF_NEW_EQUIPMENT (
+    Transaction_id BIGINT NOT NULL,
+    Type_of_new_equipment VARCHAR(255),
+    PRIMARY KEY (Transaction_id),
+    CONSTRAINT PURCHASE_OF_NEW_EQUIPMENT_fk_1 FOREIGN KEY (Transaction_id)
+        REFERENCES EXPENDITURE (Transaction_id)
+);
+LOCK TABLES PURCHASE_OF_NEW_EQUIPMENT WRITE;
+
+INSERT INTO PURCHASE_OF_NEW_EQUIPMENT VALUES
+(202010280,'chairs and table parchased for the committe office room in block A');
+
+UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS FESTIVE_OR_SPECIAL_EVENTS;
+
+CREATE TABLE FESTIVE_OR_SPECIAL_EVENTS (
+    Transaction_id BIGINT NOT NULL,
+    Type_of_events VARCHAR(255),
+    PRIMARY KEY (Transaction_id),
+    CONSTRAINT FESTIVE_OR_SPECIAL_EVENTS_fk_1 FOREIGN KEY (Transaction_id)
+        REFERENCES EXPENDITURE (Transaction_id)
+);
+
+LOCK TABLES FESTIVE_OR_SPECIAL_EVENTS WRITE;
+
+INSERT INTO FESTIVE_OR_SPECIAL_EVENTS VALUES
+(202010080,'Dasara festival celebrations'),
+(202012241,'Christmas celebrations'),
+(202012300,'New year celebrations'),
+(202101100,'Sankranti'),
+(202101250,'Republic day celebrations'),
+(202108140,'Independence day celebrations'),
+(202110090,'Dasara celebrations');
+
+
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS SALARIES;
+
+CREATE TABLE SALARIES (
+    Transaction_id BIGINT NOT NULL,
+    Monthly_salaries VARCHAR(255),
+    PRIMARY KEY (Transaction_id),
+    CONSTRAINT SALARIES_fk_1 FOREIGN KEY (Transaction_id)
+        REFERENCES EXPENDITURE (Transaction_id)
+);
+
+LOCK TABLES SALARIES WRITE;
+
+INSERT INTO SALARIES VALUES
+(202010200,'Salaries for employees'),
+(202011200,'Salaries for employees'),
+(202012240,'Salaries for employees'),
+(202101200,'Salaries for employees'),
+(202102200,'Salaries for employees'),
+(202103210,'Salaries for employees'),
+(202104200,'Salaries for employees'),
+(202105200,'Salaries for employees'),
+(202106220,'Salaries for employees'),
+(202107220,'Salaries for employees'),
+(202108200,'Salaries for employees'),
+(202109250,'Salaries for employees');
+
+UNLOCK TABLES;
