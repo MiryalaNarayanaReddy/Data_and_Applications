@@ -17,11 +17,12 @@ def insert_new_owner(cur,con):
         # new_owner['Owner_since'] = datetime.now().strftime("%Y-%M-%D %H:%M:%S")
 
         # creation of owner_id
-        query = f"ISERT INTO APARTMENT VALUES('%s','%s','%s','%s')"%(Apartment_number,Block_name,Owner_id,ap_size,mmc)
-
+        query = f"INSERT INTO APARTMENT VALUES ('%s','%s','%s','%s','%s')"%(Apartment_number, Block_name, Owner_id, ap_size, mmc)
+        print(query)
         cur.execute(query)
         con.commit()
-        query = f"INSERT INTO OWNERS VALUES ('%s', '%s','%s','%s','%s')"%(Owner_name,Owner_id,Block_name,Email_id,Owner_since)
+        query = f"INSERT INTO OWNERS VALUES ('%s', '%s','%s','%s','%s')"%(Owner_name, Owner_id, Block_name, Email_id, Owner_since)
+        print(query)
         cur.execute(query)
         con.commit()
 
@@ -48,28 +49,38 @@ def remove_owner(cur,con):
         cur.execute(query)
         con.commit()
         owner_id = cur.fetchone()
-       # print(owner_id['Owner_id'])
-        query  = f"SELECT * FROM OWNERS WHERE Owner_id = %s"%(owner_id['Owner_id'])
+        print("Owner id = ",owner_id['Owner_id'])
+        query  = f"SELECT * FROM OWNERS WHERE Owner_id = '%s'"%(owner_id['Owner_id'])
         try:
             cur.execute(query)
             con.commit()
             result = cur.fetchone()
-            d = datetime.now()
-            dt = f"%d-%d-%d %d:%d:%d"%(d.year,d.month,d.day,d.hour,d.minute,d.second)
-            print(dt)
+            # d = datetime.now()
+            # dt = f"%d-%d-%d %d:%d:%d"%(d.year,d.month,d.day,d.hour,d.minute,d.second)
+            # print(dt)
             # print(result)
-            query = f"INSERT INTO OWNERSHIP_HISTORY VALUES ('%s',%d,'%s','%s','%s','%s')"%(result['Owner_name'],owner_id['Owner_id'],Block_name,result['Email_id'],result['Owner_since'], dt)
+            query = f"INSERT INTO OWNERSHIP_HISTORY VALUES ('%s',%d,'%s','%s','%s','%s')"%(result['Owner_name'],owner_id['Owner_id'],Block_name,result['Email_id'],result['Owner_since'], dt.date_time_now())
             
             # print(query)
             cur.execute(query)
             con.commit()
-            query = f"DELETE FROM APARTMENT,OWNER WHERE Owner_id = '%s' and Block_name = '%s'"%(owner_id['Owner_id'],Block_name)
+            query = f"SET foreign_key_checks = 0"
             cur.execute(query)
             con.commit()
+
             query = f"DELETE FROM OWNERS WHERE Owner_id = '%s' and Block_name = '%s'"%(owner_id['Owner_id'],Block_name)
+            # print(query)
             cur.execute(query)
             con.commit()
-        
+            query = f"DELETE FROM APARTMENT WHERE Owner_id = %s and Block_name = '%s'"%(owner_id['Owner_id'],Block_name)
+            # print(query)
+            cur.execute(query)
+            con.commit()
+
+            query = f"SET foreign_key_checks = 1"
+            cur.execute(query)
+            con.commit()
+
         except Exception as e:
             print(e)
     except Exception as e:

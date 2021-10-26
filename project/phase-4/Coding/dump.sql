@@ -527,7 +527,7 @@ CREATE TABLE EMPLOYEE_HISTORY (
 LOCK TABLES EMPLOYEE_HISTORY WRITE;
 
 INSERT INTO EMPLOYEE_HISTORY VALUES 
-(2,'john','john@outlook.com',2000,NULL,'managing festive events','2020-10-01 10:21:53','2020-10-20 10:24:35');
+(2,'john','john@outlook.com',2000,NULL,'managing festive events','2020-10-01','2020-10-20 10:24:35');
 
 UNLOCK TABLES;
 
@@ -655,7 +655,7 @@ DROP TABLE IF EXISTS EXPENDITURE;
 CREATE TABLE EXPENDITURE (
     Transaction_id BIGINT NOT NULL, -- yyyymmddn
     Amount_spent FLOAT NOT NULL,
-    Transaction_time DATE NOT NULL,
+    Transaction_time DATETIME NOT NULL,
     PRIMARY KEY (Transaction_id)
 );
 

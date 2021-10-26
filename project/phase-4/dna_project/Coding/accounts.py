@@ -55,7 +55,7 @@ def get_this_months_income(cur,con):
 
 def add_this_months_expenditure(cur,con):
     try:
-        query = f"SELECT SUM(Amount_spent) as expenditure FROM EXPENDITURE WHERE month(Transaction_time) = %d"%(datetime.now().month)
+        query = f"SELECT SUM(Amount_spent) as expenditure FROM EXPENDITURE WHERE year(Transaction_time) = %d and month(Transaction_time) = %d"%(datetime.now().year,datetime.now().month)
         # print(query)
         cur.execute(query)
         con.commit()

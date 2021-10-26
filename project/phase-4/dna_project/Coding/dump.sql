@@ -289,8 +289,39 @@ CREATE TABLE MMC (
 LOCK TABLES MMC WRITE;
 
 INSERT INTO MMC VALUES 
-('A',102,'2020-10-1'),
-('B',104,'2020-12-1');
+('A',101,'2021-11-1'),
+('A',102,'2021-12-1'),
+('A',103,'2021-12-1'),
+('A',104,'2021-10-1'),
+('A',105,'2021-12-1'),
+('A',201,'2021-12-1'),
+('A',202,'2021-10-1'),
+('A',203,'2021-12-1'),
+('A',204,'2021-10-1'),
+('A',205,'2021-12-1'),
+
+('B',101,'2021-10-1'),
+('B',102,'2021-12-1'),
+('B',103,'2021-12-1'),
+('B',104,'2021-10-1'),
+('B',105,'2021-12-1'),
+('B',201,'2021-12-1'),
+('B',202,'2021-11-1'),
+('B',203,'2021-12-1'),
+('B',204,'2021-11-1'),
+('B',205,'2021-12-1'),
+
+('C',101,'2021-10-1'),
+('C',102,'2021-11-1'),
+('C',103,'2021-11-1'),
+('C',104,'2021-10-1'),
+('C',105,'2022-1-1'),
+('C',201,'2021-12-1'),
+('C',202,'2021-10-1'),
+('C',203,'2021-12-1'),
+('C',204,'2021-10-1'),
+('C',205,'2022-4-1');
+
 
 UNLOCK TABLES;
 
@@ -378,7 +409,7 @@ INSERT INTO ACCOUNTS VALUES
 (1,'2021-06-30',51000,30000),
 (1,'2021-07-31',51000,30000),
 (1,'2021-08-31',51000,42000),
-(1,'2021-09-30',51000,38000);
+(1,'2021-09-30',51000,30000);
 
 
 UNLOCK TABLES;
@@ -478,10 +509,10 @@ LOCK TABLES EMPLOYEE WRITE;
 
 INSERT INTO EMPLOYEE VALUES 
 
-(1,'Charan','charan@yahoo.com',5000,NULL,'watch man','2020-10-1 12:14:50'),
-(2,'vanu','venu@gmail.com',5000,NULL,'watch man','2020-10-3 14:45:07'),
-(3,'ganapati','ganapati@gmail.com',10000,NULL,'cleaning','2020-10-9 10:13:16'),
-(4,'Bolu','bolu@gmail.com',10000,NULL,'cleaning','2020-10-8 10:10:6');
+(1,'Charan','charan@yahoo.com',5000,NULL,'watch man','2020-10-1'),
+(2,'vanu','venu@gmail.com',5000,NULL,'watch man','2020-10-3'),
+(3,'ganapati','ganapati@gmail.com',10000,NULL,'cleaning','2020-10-9'),
+(4,'Bolu','bolu@gmail.com',10000,NULL,'cleaning','2020-10-8');
 
 UNLOCK TABLES;
 
@@ -527,7 +558,7 @@ CREATE TABLE EMPLOYEE_HISTORY (
 LOCK TABLES EMPLOYEE_HISTORY WRITE;
 
 INSERT INTO EMPLOYEE_HISTORY VALUES 
-(2,'john','john@outlook.com',2000,NULL,'managing festive events','2020-10-01 10:21:53','2020-10-20 10:24:35');
+(2,'john','john@outlook.com',2000,NULL,'managing festive events','2020-10-01','2020-10-20');
 
 UNLOCK TABLES;
 
@@ -655,7 +686,7 @@ DROP TABLE IF EXISTS EXPENDITURE;
 CREATE TABLE EXPENDITURE (
     Transaction_id BIGINT NOT NULL, -- yyyymmddn
     Amount_spent FLOAT NOT NULL,
-    Transaction_time DATE NOT NULL,
+    Transaction_time DATETIME NOT NULL,
     PRIMARY KEY (Transaction_id)
 );
 
@@ -690,7 +721,10 @@ INSERT INTO EXPENDITURE VALUES
 (202108140,12000,'2021-08-14 14:34:03'),
 
 (202109250,30000,'2021-09-25 17:01:04'),
-(202110090,8000,'2021-10-09 16:01:04');
+
+
+(202110090,8000,'2021-10-09 16:01:04'),
+(202110250,30000,'2021-10-25 14:07:03');
 
 UNLOCK TABLES;
 
@@ -776,6 +810,7 @@ INSERT INTO SALARIES VALUES
 (202106220,'Salaries for employees'),
 (202107220,'Salaries for employees'),
 (202108200,'Salaries for employees'),
-(202109250,'Salaries for employees');
+(202109250,'Salaries for employees'),
+(202110250,'Salaries for employees');
 
 UNLOCK TABLES;
